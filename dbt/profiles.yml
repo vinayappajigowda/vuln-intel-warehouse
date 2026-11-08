@@ -1,0 +1,25 @@
+vulnintel:
+  target: "{{ env_var('DBT_TARGET', 'dev') }}"
+  outputs:
+    # local, free: the same DuckDB file the loader writes to
+    dev:
+      type: duckdb
+      path: "{{ env_var('VULNINTEL_DUCKDB_PATH', '../data/warehouse.duckdb') }}"
+      schema: main
+      threads: 2
+      # Guard rails for a laptop. Without them DuckDB may use ~80% of RAM and spill to disk until
+      # the drive is full. Override any of these in .env.
+      settings:
+        memory_limit: "{{ env_var('DUCKDB_MEMORY_LIMIT', '4GB') }}"
+        max_temp_directory_size: "{{ env_var('DUCKDB_MAX_TEMP', '20GiB') }}"
+        preserve_insertion_order: false
+
+    # cloud: `gcloud auth application-default login`, then DBT_TARGET=prod
+    prod:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GCP_PROJECT', 'set-GCP_PROJECT') }}"
+      dataset: vulnintel
+      location: "{{ env_var('BQ_LOCATION', 'US') }}"
+      threads: 8
+      job_execution_timeout_seconds: 600

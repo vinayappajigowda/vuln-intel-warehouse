@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: vulnintel
+Version: 0.1.0
+Summary: Vulnerability intelligence warehouse: NVD + EPSS + CISA KEV -> lakehouse landing zone -> DuckDB/BigQuery -> dbt
+Requires-Python: >=3.11
+Requires-Dist: requests>=2.31
+Requires-Dist: pandas>=2.2
+Requires-Dist: pyarrow>=16
+Requires-Dist: duckdb>=1.1
+Provides-Extra: dbt
+Requires-Dist: dbt-core<1.13,>=1.10; extra == "dbt"
+Requires-Dist: dbt-duckdb>=1.10; extra == "dbt"
+Provides-Extra: bigquery
+Requires-Dist: google-cloud-bigquery>=3.20; extra == "bigquery"
+Requires-Dist: dbt-bigquery>=1.10; extra == "bigquery"
+Provides-Extra: dev
+Requires-Dist: pytest>=8; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"

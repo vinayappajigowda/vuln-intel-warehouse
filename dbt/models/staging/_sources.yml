@@ -1,0 +1,36 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Append-only copies of landed files, one row per record per load. Loaded by
+      `vulnintel load`; never edited by dbt. Duplicates across batches are expected.
+    schema: "{{ 'raw' if target.type != 'bigquery' else env_var('BQ_RAW_DATASET', 'vulnintel_raw') }}"
+    # macros aren't available while YAML is parsed, so the cross-db cast is inlined here
+    loaded_at_field: "{{ 'cast(_ingested_at as timestamp)' if target.type == 'bigquery' else 'cast(cast(_ingested_at as timestamptz) as timestamp)' }}"
+    tables:
+      - name: nvd_cves
+        description: NVD CVE API 2.0 records (full JSON in `payload`), incremental on lastModified.
+        config:
+          freshness:
+            warn_after: {count: 2, period: day}
+            error_after: {count: 4, period: day}
+        columns:
+          - name: cve_id
+            data_tests: [not_null]
+          - name: payload
+            data_tests: [not_null]
+
+      - name: epss_scores
+        description: FIRST EPSS daily scores, one file per score_date.
+        config:
+          freshness:
+            warn_after: {count: 2, period: day}
+            error_after: {count: 4, period: day}
+
+      - name: kev_snapshots
+        description: Daily snapshots of the CISA KEV catalog (full entry JSON in `payload`).
+        config:
+          freshness:
+            warn_after: {count: 2, period: day}
+            error_after: {count: 7, period: day}

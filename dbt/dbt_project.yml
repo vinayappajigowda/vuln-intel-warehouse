@@ -1,0 +1,22 @@
+name: vulnintel
+version: "0.1.0"
+config-version: 2
+profile: vulnintel
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+target-path: target
+clean-targets: [target, dbt_packages]
+
+models:
+  vulnintel:
+    staging:
+      +schema: staging
+      # tables, not views: the JSON parsing and dedup run once per build instead of once per test
+      +materialized: table
+    # week 2: intermediate (SCD2 EPSS history) and marts (star schema) go here
+
+tests:
+  vulnintel:
+    +store_failures: false

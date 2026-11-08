@@ -1,0 +1,126 @@
+{
+ "resultsPerPage": 2,
+ "startIndex": 0,
+ "totalResults": 4,
+ "format": "NVD_CVE",
+ "version": "2.0",
+ "timestamp": "2026-11-08T02:00:00.000",
+ "vulnerabilities": [
+  {
+   "cve": {
+    "id": "CVE-2021-44228",
+    "sourceIdentifier": "security@apache.org",
+    "published": "2021-12-10T10:15:09.143",
+    "lastModified": "2025-02-04T15:15:13.773",
+    "vulnStatus": "Analyzed",
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "Apache Log4j2 JNDI features do not protect against attacker controlled LDAP and other JNDI related endpoints."
+     },
+     {
+      "lang": "es",
+      "value": "(es) Apache Log4j2 JNDI features do not protect against attacker controlled LDAP and other JNDI related endpoints."
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "baseScore": 10.0,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 6.0
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "nvd@nist.gov",
+      "type": "Primary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-917"
+       },
+       {
+        "lang": "en",
+        "value": "CWE-502"
+       },
+       {
+        "lang": "en",
+        "value": "CWE-20"
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-44228",
+      "source": "nvd@nist.gov"
+     }
+    ]
+   }
+  },
+  {
+   "cve": {
+    "id": "CVE-2020-1938",
+    "sourceIdentifier": "security@apache.org",
+    "published": "2020-02-24T22:15:11.957",
+    "lastModified": "2024-11-21T05:31:47.153",
+    "vulnStatus": "Analyzed",
+    "descriptions": [
+     {
+      "lang": "en",
+      "value": "When using the Apache JServ Protocol (AJP), care must be taken when trusting incoming connections to Apache Tomcat."
+     },
+     {
+      "lang": "es",
+      "value": "(es) When using the Apache JServ Protocol (AJP), care must be taken when trusting incoming connections to Apache Tomcat."
+     }
+    ],
+    "metrics": {
+     "cvssMetricV31": [
+      {
+       "source": "nvd@nist.gov",
+       "type": "Primary",
+       "cvssData": {
+        "version": "3.1",
+        "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "baseScore": 9.8,
+        "baseSeverity": "CRITICAL",
+        "attackVector": "NETWORK"
+       },
+       "exploitabilityScore": 3.9,
+       "impactScore": 5.9
+      }
+     ]
+    },
+    "weaknesses": [
+     {
+      "source": "nvd@nist.gov",
+      "type": "Primary",
+      "description": [
+       {
+        "lang": "en",
+        "value": "CWE-269"
+       }
+      ]
+     }
+    ],
+    "references": [
+     {
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-1938",
+      "source": "nvd@nist.gov"
+     }
+    ]
+   }
+  }
+ ]
+}

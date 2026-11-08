@@ -1,0 +1,2 @@
+[console_scripts]
+vulnintel = vulnintel.cli:main

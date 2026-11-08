@@ -1,0 +1,30 @@
+# Local Airflow (single container, `airflow standalone`) for development.
+#   docker compose up --build
+#   UI: http://localhost:8080  (no login locally, see AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS)
+services:
+  airflow:
+    build: .
+    command: standalone
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/project/airflow/dags
+      # local dev only: no login screen, everyone is admin. Never use this on a shared server.
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
+      VULNINTEL_DATA_DIR: /opt/project/data
+      VULNINTEL_DUCKDB_PATH: /opt/project/data/warehouse.duckdb
+      DBT_PROFILES_DIR: /opt/project/dbt
+    volumes:
+      - ./src:/opt/project/src
+      - ./dbt:/opt/project/dbt
+      - ./airflow/dags:/opt/project/airflow/dags
+      - ./data:/opt/project/data
+      - ./tests:/opt/project/tests
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/api/v2/monitor/health"]
+      interval: 30s
+      retries: 5

@@ -1,0 +1,86 @@
+version: 2
+
+models:
+  - name: stg_nvd__cves
+    description: Latest version of each CVE from NVD, with CVSS v3.1 and primary CWE parsed out.
+    columns:
+      - name: cve_id
+        data_tests:
+          - unique
+          - not_null
+          - matches_pattern:
+              arguments:
+                pattern: "CVE-[0-9]{4}-[0-9]{4,}"
+      - name: published_at
+        data_tests: [not_null]
+      - name: vuln_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [Received, Awaiting Analysis, Undergoing Analysis, Analyzed, Modified, Deferred, Rejected]
+              config:
+                severity: warn  # a new NVD status should alert us, not stop the pipeline
+      - name: cvss3_base_score
+        data_tests:
+          - between:
+              arguments: {min_value: 0, max_value: 10}
+      - name: cvss3_severity
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [NONE, LOW, MEDIUM, HIGH, CRITICAL]
+      - name: cvss3_score_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [Primary, Secondary]
+
+  - name: stg_epss__scores
+    description: EPSS probability and percentile for each CVE on each score date.
+    data_tests:
+      - unique_combination:
+          arguments:
+            combination_of_columns: [cve_id, score_date]
+    columns:
+      - name: score_date
+        data_tests: [not_null]
+      - name: cve_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_nvd__cves')
+                field: cve_id
+              config:
+                severity: warn  # EPSS sometimes scores CVEs before NVD publishes them
+      - name: epss
+        data_tests:
+          - not_null
+          - between:
+              arguments: {min_value: 0, max_value: 1}
+      - name: percentile
+        data_tests:
+          - between:
+              arguments: {min_value: 0, max_value: 1}
+
+  - name: stg_kev__vulnerabilities
+    description: CISA KEV catalog entries, one row per entry per daily snapshot.
+    columns:
+      - name: kev_snapshot_id
+        data_tests: [unique, not_null]
+      - name: cve_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_nvd__cves')
+                field: cve_id
+              config:
+                severity: warn
+      - name: date_added
+        data_tests: [not_null]
+      - name: known_ransomware_campaign_use
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [Known, Unknown]
